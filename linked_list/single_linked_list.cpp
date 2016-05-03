@@ -24,6 +24,8 @@ class List {
     public:
         List();
         ~List();
+        //copy constructor tho
+        List(const List &l);
         //get and set
         Node* getHead();
         void setHead(Node *);
@@ -74,6 +76,25 @@ List::~List() {
     }
     size = 0;
     setHead(NULL);
+}
+
+List::List(const List &l) { //passing in the old list l
+    Node *p; //follows new list
+    Node *q; //follows old list
+    if(l.head == 0) {
+        head = NULL;
+    } else {
+        head = new Node(l.head->getData());
+        p = head;
+        q = l.head->getNext();
+        size++;
+    }
+    while(q != NULL) {
+        p->setNext(new Node(q->getData()));
+        q = q->getNext();
+        p = p->getNext();
+        size++;
+    }
 }
 
 Node* List::getHead() {
@@ -189,7 +210,11 @@ int main() {
     list.insert(4, 5);
     list.printList();
  
-    list.reverseIterative(list.getHead(), NULL);
+    list.reverseRecursive(list.getHead(), NULL);
     list.printList();
+
+    List l2(list);
+    l2.printList();
+
     return 0;
 }
