@@ -19,12 +19,17 @@ class List {
     private:
         Node *head;
         int size;
+
     public:
         List();
         ~List();
+        Node* getHead();
+        void setHead(Node *);
         int getSize();
+        bool isEmpty();
         void insert(int, int);
         void remove(int);
+        void reverseRecursive(Node *, Node *);
         void printList();
 };
 
@@ -55,27 +60,43 @@ List::List() {
 }
 
 List::~List() {
-    Node *current = head;
+    Node *current = getHead();
     while( current != NULL) {
         Node *tmp = current->getNext();
         delete current;
         current = tmp;
     }
     size = 0;
-    head = NULL;
+    setHead(NULL);
+}
+
+Node* List::getHead() {
+    return head;
+}
+
+void List::setHead(Node *n) {
+    head = n;
 }
 
 int List::getSize() {
     return size;
 }
 
+bool List::isEmpty() {
+    if(getSize() == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void List::insert(int data, int location) {
     Node *n = new Node(data);
-    Node *p = head;
+    Node *p = getHead();
     int count = 0;
-    if(location == 0 || getSize() == 0) {
+    if(location == 0 || isEmpty() == true) {
         n->setNext(p);
-        head = n;
+        setHead(n);
     } else {
         Node *q = p->getNext();
         while( count < location-1 && count < getSize()-1) {
@@ -90,12 +111,12 @@ void List::insert(int data, int location) {
 }
 
 void List::remove(int location) {
-    if(getSize() != 0 && location < getSize()) {
-        Node *p = head;
+    if(isEmpty() == false && location < getSize()) {
+        Node *p = getHead();
         Node *q = p->getNext();
         if(location == 0) {
             delete p;
-            head = q;
+            setHead(q);
         } else {
             int count = 0;
             while(count < location-1) {
@@ -114,8 +135,20 @@ void List::remove(int location) {
     }
 } 
 
+void List::reverseRecursive(Node *current, Node *previous) {
+    Node *p = current;
+    Node *q = previous;
+    if(p == NULL) { //if the next node is null we must have reached the end of the list
+        setHead(q);
+        return;
+    }
+    reverseRecursive(p->getNext(), p);
+    p->setNext(q);
+    return;
+}
+
 void List::printList() {
-    Node *tmp = head;
+    Node *tmp = getHead();
     while(tmp != NULL) {
         cout << tmp->getData() << " -> ";
         tmp = tmp->getNext();
@@ -135,10 +168,7 @@ int main() {
     list.insert(4, 5);
     list.printList();
  
-    list.remove(0);
-    list.remove(100);
-    list.remove(2);
-
+    list.reverseRecursive(list.getHead(), NULL);
     list.printList();
     return 0;
 }
