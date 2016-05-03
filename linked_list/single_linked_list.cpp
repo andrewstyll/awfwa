@@ -9,6 +9,7 @@ class Node {
 
     public:
         Node(int);
+        //get and set
         int getData();
         void setData(int);
         Node *getNext();
@@ -23,13 +24,18 @@ class List {
     public:
         List();
         ~List();
+        //get and set
         Node* getHead();
         void setHead(Node *);
         int getSize();
         bool isEmpty();
+        //common operations
         void insert(int, int);
         void remove(int);
+        //advanced flight patterns
         void reverseRecursive(Node *, Node *);
+        void reverseIterative(Node *, Node *);
+        //so we aren't flying blind
         void printList();
 };
 
@@ -147,6 +153,21 @@ void List::reverseRecursive(Node *current, Node *previous) {
     return;
 }
 
+void List::reverseIterative(Node *current, Node* previous) {
+    Node *p = current;
+    Node *q = previous;
+    Node *tmp;
+
+    while(p != NULL) {
+        tmp = p->getNext();
+        p->setNext(q);
+        q = p;
+        p = tmp;
+    }
+    setHead(q);
+    return;
+}
+
 void List::printList() {
     Node *tmp = getHead();
     while(tmp != NULL) {
@@ -168,7 +189,7 @@ int main() {
     list.insert(4, 5);
     list.printList();
  
-    list.reverseRecursive(list.getHead(), NULL);
+    list.reverseIterative(list.getHead(), NULL);
     list.printList();
     return 0;
 }
