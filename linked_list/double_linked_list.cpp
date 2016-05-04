@@ -101,18 +101,27 @@ List::~List() {
 List::List(const List &l) { //passing in the old list l
     Node *p; //follows new list
     Node *q; //follows old list
+    Node *pPrev;
+    size = 0;
+    
     if(l.head == 0) {
         head = NULL;
+        tail = NULL;
     } else {
         head = new Node(l.head->getData());
         p = head;
         q = l.head->getNext();
+        p->setPrev(NULL);
+        pPrev = p;
         size++;
     }
     while(q != NULL) {
         p->setNext(new Node(q->getData()));
         q = q->getNext();
         p = p->getNext();
+        p->setPrev(pPrev);
+        pPrev = pPrev->getNext();
+        setTail(p);
         size++;
     }
 }
@@ -279,11 +288,11 @@ int main() {
     list.insert(5, 3);
     list.printList();
 
-    list.reverseIterative(list.getHead(), NULL, list.getHead()->getNext());
-    list.printList();
+    //list.reverseIterative(list.getHead(), NULL, list.getHead()->getNext());
+    //list.printList();
 
-    /*List l2(list);
-    l2.printList();*/
+    List l2(list);
+    l2.printList();
 
     return 0;
 }
