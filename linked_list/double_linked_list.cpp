@@ -43,8 +43,8 @@ class List {
         void insert(int, int);
         void remove(int);
         //advanced flight patterns
-        void reverseRecursive(Node *, Node *);
-        void reverseIterative(Node *, Node *);
+        void reverseRecursive(Node *, Node *, Node *);
+        void reverseIterative(Node *, Node *, Node *);
         //so we aren't flying blind
         void printList();
 };
@@ -211,29 +211,41 @@ void List::remove(int location) {
     }
 } 
 
-void List::reverseRecursive(Node *current, Node *previous) {
-    Node *p = current;
-    Node *q = previous;
+void List::reverseRecursive(Node *current, Node *previous, Node *nextNode) {
+    Node *p = nextNode;
+    Node *q = current;
+    Node *r = previous;
+    
     if(p == NULL) { //if the next node is null we must have reached the end of the list
         setHead(q);
+        q->setPrev(NULL);
+        q->setNext(r);
         return;
     }
-    reverseRecursive(p->getNext(), p);
-    p->setNext(q);
+    reverseRecursive(q->getNext(), q, q->getNext()->getNext());
+    q->setPrev(p);
+    q->setNext(r);
+    setTail(q);
     return;
 }
 
-void List::reverseIterative(Node *current, Node* previous) {
-    Node *p = current;
-    Node *q = previous;
-    Node *tmp;
+void List::reverseIterative(Node *current, Node* previous, Node *nextNode) {
+    Node *p = nextNode;
+    Node *q = current;
+    Node *r = previous;
 
+    setTail(q);
+    
     while(p != NULL) {
-        tmp = p->getNext();
-        p->setNext(q);
-        q = p;
-        p = tmp;
+        q->setNext(r);
+        q->setPrev(p);
+        
+        r = q;
+        q = q->getPrev();
+        p = p->getNext();
     }
+    q->setNext(r);
+    q->setPrev(p);
     setHead(q);
     return;
 }
@@ -267,13 +279,10 @@ int main() {
     list.insert(5, 3);
     list.printList();
 
-    list.remove(2);
-    list.printList();
- 
-    /*list.reverseRecursive(list.getHead(), NULL);
+    list.reverseIterative(list.getHead(), NULL, list.getHead()->getNext());
     list.printList();
 
-    List l2(list);
+    /*List l2(list);
     l2.printList();*/
 
     return 0;
