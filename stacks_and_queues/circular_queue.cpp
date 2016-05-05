@@ -158,8 +158,11 @@ int main() {
     q.push(7);
     q.push(8);    
     q.push(9);
+    q.printQueue();
+    
     q.push(10);
     q.push(11);    
+    q.printQueue();
 
     q.pop(); 
     q.pop(); 
@@ -172,6 +175,6 @@ int main() {
    
     Queue p(q); 
     p.printQueue();
-    
+   
     return 0;
 }
