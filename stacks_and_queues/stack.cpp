@@ -11,7 +11,7 @@ class Stack {
     public:
         Stack(int = 10);
         ~Stack();
-        Stack(Stack &s);        
+        Stack(const Stack &s);        
 
         void push(int);
         void pop();
@@ -29,7 +29,7 @@ Stack::~Stack() {
     delete[] stack;
 }
 
-Stack::Stack(Stack &s) {
+Stack::Stack(const Stack &s) {
     size = s.size;
     capacity = s.capacity;
 
