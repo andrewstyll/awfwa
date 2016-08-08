@@ -19,7 +19,8 @@ class Node {
         void setAlphabet(int, char);
         bool getEndWord();
         void setEndWord(bool);
-    
+   
+        void lexPrint(string);
         void clear();
 };
 
@@ -33,6 +34,7 @@ class Trie {
 
         void insert(string);
         void find(string);
+        void lexPrint();
 };
 
 Node::Node(char c) {
@@ -58,6 +60,22 @@ bool Node::getEndWord() {
 
 void Node::setEndWord(bool val) {
     endWord = val;
+}
+
+void Node::lexPrint(string prefix) {
+    if(letter != '\0') {
+        prefix += letter;
+    }
+    if(endWord == true) {
+        cout << prefix << "\n";
+    }
+    for(int i = 0; i < ALPHABET_SIZE; i++) {
+        if(alphabet[i] != NULL) {
+            alphabet[i]->lexPrint(prefix);
+        }
+    }
+
+    prefix.pop_back();
 }
 
 void Node::clear() {//clears all nodes underneath and including the node passed
@@ -87,7 +105,6 @@ void Trie::insert(string word) {
             tmp->setAlphabet(j, word[i]);// = new Node();   
         }
         tmp = tmp->getAlphabet(j);
-        //tmp->letter = word[i];
     }
     tmp->setEndWord(true);
     cout << "placed " << word << "\n";
@@ -112,6 +129,10 @@ void Trie::find(string word) {
     }
 }
 
+void Trie::lexPrint() {
+    head->lexPrint("");
+}
+
 int main() {
    
     Trie T;
@@ -122,6 +143,17 @@ int main() {
     T.insert("dog");
     T.find("doggers");
     T.find("dog");
+  
+    T.insert("sense");
+    T.insert("doll");
+    T.insert("dorm");
+    T.insert("ball");
+    T.insert("bat");
+    T.insert("sent");
+    T.insert("dork");
+    T.insert("send");
     
+    T.lexPrint();
+
     return 0;
 }
