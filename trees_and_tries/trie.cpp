@@ -6,15 +6,20 @@ using namespace std;
 const int ALPHABET_SIZE = 26;
 
 class Node {
-    //private:
-
-    public:
-        Node **alphabet;
+    private:
+        Node **alphabet; //will become array
         char letter;
         bool endWord;
-        
-        Node();
 
+    public:
+        
+        Node(char);
+
+        Node *getAlphabet(int);
+        void setAlphabet(int, char);
+        bool getEndWord();
+        void setEndWord(bool);
+    
         void clear();
 };
 
@@ -30,15 +35,32 @@ class Trie {
         void find(string);
 };
 
-Node::Node() {
+Node::Node(char c) {
     alphabet = new Node*[ALPHABET_SIZE];
     for(int i = 0; i < ALPHABET_SIZE; i++) {
         alphabet[i] = NULL;
     }
+    letter = c;
     endWord = false;
 }
 
-void Node::clear() {
+Node* Node::getAlphabet(int i) {
+    return alphabet[i];
+}
+
+void Node::setAlphabet(int i, char c) {
+    alphabet[i] = new Node(c);
+}
+
+bool Node::getEndWord() {
+    return endWord;
+}   
+
+void Node::setEndWord(bool val) {
+    endWord = val;
+}
+
+void Node::clear() {//clears all nodes underneath and including the node passed
     for(int i = 0; i < ALPHABET_SIZE; i++) {
         if(alphabet[i] != NULL) {
             alphabet[i]->clear();
@@ -48,7 +70,7 @@ void Node::clear() {
 }
 
 Trie::Trie() {
-    head = new Node();
+    head = new Node('\0');
 }
 
 Trie::~Trie() {
@@ -61,13 +83,13 @@ void Trie::insert(string word) {
     int j;
     for(int i = 0; word[i] != '\0'; i++) {
         j = word[i] - 'a';
-        if(tmp->alphabet[j] == NULL) {
-            tmp->alphabet[j] = new Node();   
+        if(tmp->getAlphabet(j) == NULL) {
+            tmp->setAlphabet(j, word[i]);// = new Node();   
         }
-        tmp = tmp->alphabet[j];
-        tmp->letter = word[i];
+        tmp = tmp->getAlphabet(j);
+        //tmp->letter = word[i];
     }
-    tmp->endWord = true;
+    tmp->setEndWord(true);
     cout << "placed " << word << "\n";
 }
 
@@ -76,14 +98,14 @@ void Trie::find(string word) {
     int j;
     for(int i = 0; word[i] != '\0'; i++) {
         j = word[i] - 'a';
-        if(tmp->alphabet[j] != NULL) { //something exists here
-            tmp = tmp->alphabet[j];
+        if(tmp->getAlphabet(j) != NULL) { //something exists here
+            tmp = tmp->getAlphabet(j);
         } else {
             cout << "failed " << word << "\n";
             return;
         }
     }
-    if(tmp->endWord == true) {
+    if(tmp->getEndWord() == true) {
         cout << "found " << word << "\n";
     } else {
         cout << "failed " << word << "\n";
@@ -96,7 +118,10 @@ int main() {
 
     T.insert("catman");
     T.find("cat");
+    T.find("catman");
     T.insert("dog");
     T.find("doggers");
+    T.find("dog");
+    
     return 0;
 }
