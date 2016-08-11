@@ -88,6 +88,7 @@ int Node::height() {
     if(this == NULL) {
        return -1; //so if height it 0, tree doesn't return a height of 1
     return 1 + max(getLeftNode()->height(), getLeftNode()->height());
+    }
 }
 
 int Node::front() {
