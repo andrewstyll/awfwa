@@ -6,8 +6,7 @@ using namespace std;
 const int ALPHABET_SIZE = 26;
 
 class Node {
-    //private:
-    public:
+    private:
         Node *alphabet[ALPHABET_SIZE]; //will become array
         char letter;
         bool endWord;
