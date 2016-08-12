@@ -24,6 +24,7 @@ class Node {
 
         bool insert(string, int);
         bool remove(string, int);
+        bool find(string, int);
         void lexPrint(string);
         void clear();
 };
@@ -40,6 +41,7 @@ class Trie {
         
         void insert(string);
         bool remove(string);
+        bool find(string);
         bool lexPrint();
         void clear();
 };
@@ -116,6 +118,22 @@ bool Node::remove(string word, int i) {
     return false;
 }
 
+bool Node::find(string word, int i) {
+    Node *tmp = alphabet[getIndex(word[i])];
+    
+    if(i == word.length()) {
+        if(endWord == true) {
+            cout << word << " found\n";
+            return true;
+        }
+    } else if(tmp == NULL) {
+        cout << word << " failed\n";
+        return false;
+    }
+   
+    return tmp->find(word, i+1);
+}
+
 void Node::lexPrint(string prefix) {
     if(letter != '\0') {
         prefix += letter;
@@ -173,6 +191,14 @@ bool Trie::remove(string word) {
     }
 }
 
+bool Trie::find(string word) {
+    if(head == NULL) {
+        return false;
+    } else {
+        return head->find(word, 0);
+    }
+}
+
 bool Trie::lexPrint() {
     if(head == NULL) {
         return false;
@@ -193,12 +219,11 @@ int main() {
    
     Trie T;
     T.insert("cat");
-    T.remove("cat");
-    //T.find("cat");
-    //T.find("catman");
+    T.find("cat");
+    T.find("catman");
     T.insert("dog");
-    //T.find("doggers");
-    //T.find("dog");
+    T.find("doggers");
+    T.find("dog");
  
     T.remove("dog");
 
