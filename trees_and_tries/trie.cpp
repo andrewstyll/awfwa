@@ -24,6 +24,7 @@ class Node {
 
         bool insert(string, int);
         bool remove(string, int);
+        void lexPrint(string);
         void clear();
 };
 
@@ -39,6 +40,7 @@ class Trie {
         
         void insert(string);
         bool remove(string);
+        bool lexPrint();
         void clear();
 };
 
@@ -75,7 +77,6 @@ bool Node::isLeaf() {
             return false;
         }
     }
-    cout << "is LEAF\n";
     return true;
 }
 
@@ -83,7 +84,6 @@ bool Node::insert(string word, int i) {
     int j = getIndex(word[i]);
     if(i == word.length()) {
         endWord = true;
-        cout << "placed " << word << "\n";
         return true;
     }
     if(alphabet[j] == NULL) {
@@ -92,29 +92,7 @@ bool Node::insert(string word, int i) {
 
     return alphabet[j]->insert(word, i+1);
 }
-/*bool Node::remove(string word, int i) {
-    Node* ptr = alphabet[getIndex(word[i])];
-    cout << i << "\n";
-    if(i == word.length()-1 ) {
-        if(endWord == true) {
-            endWord = false;
-            return true;
-        }
-        return false;
-    } else if(ptr == NULL) {
-        return false;
-    }
 
-    bool ret = ptr->remove(word, i+1);
-        cout << ptr->letter << "\n";
-    if (ptr->alphabet[getIndex(word[i+1])]->isLeaf()) {
-        delete ptr;
-    }
-    if(ret) {
-        return true;
-    }
-    return false;
-}*/
 bool Node::remove(string word, int i) {
     Node *tmp = alphabet[getIndex(word[i])];
     
@@ -123,17 +101,35 @@ bool Node::remove(string word, int i) {
             endWord = false;
             return true;
         }
+    } else if(tmp == NULL) {
+        return false;
     }
 
-    bool ew = tmp->remove(word, i+1);
-
-    cout << tmp->letter << "\n";
-    if(tmp->isLeaf()) {
-    cout << tmp->letter << "\n";
-        tmp = NULL;
-    
+    if(tmp->remove(word, i+1)) {
+        if(tmp->isLeaf()) {
+            delete tmp;
+            tmp = NULL;
+            alphabet[getIndex(word[i])] = NULL;
+        }
+        return true;
     }
-    return ew;
+    return false;
+}
+
+void Node::lexPrint(string prefix) {
+    if(letter != '\0') {
+        prefix += letter;
+    }
+    if(endWord == true) {
+        cout << prefix << "\n";
+    }
+    for(int i = 0; i < ALPHABET_SIZE; i++) {
+        if(alphabet[i] != NULL) {
+            alphabet[i]->lexPrint(prefix);
+        }
+    }
+
+    prefix.pop_back();
 }
 
 void Node::clear() {//clears all nodes underneath and including the node passed
@@ -142,6 +138,9 @@ void Node::clear() {//clears all nodes underneath and including the node passed
             delete alphabet[i];
             alphabet[i] = NULL;
         }
+    }
+    if(!isLeaf()) {
+        cout << "NOT NULL\n";
     }
 }
 
@@ -174,6 +173,15 @@ bool Trie::remove(string word) {
     }
 }
 
+bool Trie::lexPrint() {
+    if(head == NULL) {
+        return false;
+    } else {
+        head->lexPrint("");
+        return true;
+    }
+}
+
 void Trie::clear() {
     if(head != NULL) {
         delete head;
@@ -185,14 +193,12 @@ int main() {
    
     Trie T;
     T.insert("cat");
-    cout << T.size() << "\n";
     T.remove("cat");
-    cout << T.size() << "\n";
-    /*T.find("cat");
-    T.find("catman");
+    //T.find("cat");
+    //T.find("catman");
     T.insert("dog");
-    T.find("doggers");
-    T.find("dog");
+    //T.find("doggers");
+    //T.find("dog");
  
     T.remove("dog");
 
@@ -203,9 +209,9 @@ int main() {
     T.insert("bat");
     T.insert("sent");
     T.insert("dork");
-    T.insert("send");*/
+    T.insert("send");
     
-    //T.lexPrint();
+    T.lexPrint();
 
     return 0;
 }
