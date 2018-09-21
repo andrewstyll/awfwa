@@ -24,7 +24,7 @@ class Heap {
         void    insert(const T&);
         T       remove();
         T       peek();
-
+        
         void    printHeap();
 };
 
@@ -152,23 +152,129 @@ T Heap<T>::peek(){
 template <class T>
 void Heap<T>::printHeap() {
     for(int i = 0; i < m_size; i++) {
-        cout << m_heap[i] << " ";
+        cout << m_heap[i].getData() << " ";
     }
     cout << "\n";
 }
 
-int main() {
-    
-    Heap<int> heap(15);
+/* ------------------------------------------------------------------------------------------------------------
+ * keep heap in same file to make easier
+ * ------------------------------------------------------------------------------------------------------------
+ */
 
-    for(int i = 5; i >= 0; i--) {
-        heap.insert(i);
+
+template <class T>
+class PriorityQueue {
+    private:
+        Heap<T>* queue;
+    public:
+        PriorityQueue(int capacity) {
+            queue = new Heap<T>(capacity);
+        }
+        ~PriorityQueue() {
+            delete queue;
+        }
+
+        bool isEmpty() {
+            return queue->isEmpty();
+        }
+        void insert(const T& val) {
+            queue->insert(val);
+        }
+        T pullFromQueue() {
+            return queue->remove();
+        }
+        T peek() {
+            return queue->peek();
+        }
+        void printQueue() {
+            queue->printHeap();
+        }
+};
+
+class Object {
+    private:
+        int m_priority;
+        char* m_data;
+
+    public:
+        Object() {}
+        Object(int priority, char* data) {
+            m_priority = priority;
+            m_data = data;
+        }
+        ~Object() {}
+        Object(const Object& obj) {
+            m_priority = obj.m_priority;
+            m_data = obj.m_data;
+        }
+        // overload comparison operators
+        bool operator< (const Object& a) { 
+            return (this->m_priority < a.m_priority); 
+        }
+        bool operator<= (const Object& a) {
+            return (this->m_priority < a.m_priority);
+        }
+        bool operator> (const Object& a) {
+            return (this->m_priority > a.m_priority);
+        }
+        bool operator>= (const Object& a) {
+            return (this->m_priority >= a.m_priority);
+        }
+        bool operator== (const Object& a) {
+            return(this->m_priority == a.m_priority);
+        }
+        int getPriority() {
+            return m_priority;
+        }
+        char* getData() {
+            return m_data;
+        }
+};
+
+int main() {
+   
+    PriorityQueue<Object> queue(10);
+
+    Object* obj5 = new Object(5, "Joe");
+    Object* obj4 = new Object(4, "Jp");
+    Object* obj3 = new Object(3, "Bea");
+    Object* obj2 = new Object(2, "Jake");
+    Object* obj1 = new Object(1, "Omar");
+    Object* obj0 = new Object(0, "Tom");
+
+    queue.insert(*obj5);
+    queue.insert(*obj4);
+    queue.insert(*obj3);
+    queue.insert(*obj2);
+    queue.insert(*obj1);
+    queue.insert(*obj0);
+
+    queue.printQueue();
+
+    Object* array = new Object[10];
+
+    int j = 0;
+    while(!queue.isEmpty()) {
+        array[j] = queue.pullFromQueue();
+        j++;
     }
-    heap.printHeap();
     
-    int val = heap.remove();
-    heap.printHeap();
-    cout << val << "\n";
-    
+    cout << "printing result\n"; 
+    for(int i = 0; i < j; i++) {
+        cout << array[i].getData() << " ";
+        //delete array[i];
+    }
+    cout << "\n";
+
+    delete obj5;
+    delete obj4;
+    delete obj3;
+    delete obj2;
+    delete obj1;
+    delete obj0;
+
+    delete[] array;
+
     return 0;
 }
