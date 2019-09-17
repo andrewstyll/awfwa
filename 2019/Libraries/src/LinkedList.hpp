@@ -18,8 +18,8 @@ class LinkedList {
         int Size() const; // returns size of list
         
         void Add(Type const &); // adds element to end of list
-        void Add(int, Type const &); // adds element at index specified or end of list if i out of range
-        Type Remove(int) const;  // removes and returns element at index or null if i out or range
+        void Add(Type const &, int); // adds element at index specified or end of list if i out of range
+        Type Remove(int);  // removes and returns element at index or null if i out or range
         
         bool Contains(Type const &) const; // searches list for element specified
         int IndexOf(Type const &) const; // searches list for element specified
@@ -31,7 +31,6 @@ LinkedList<Type>::LinkedList():
 head_(NULL),
 tail_(NULL),
 size_(0){
-    
 }
 
 template <typename Type>
@@ -67,7 +66,7 @@ void LinkedList<Type>::Add(Type const &obj) {
 }
 
 template<typename Type>
-void LinkedList<Type>::Add(int index, Type const &obj) {
+void LinkedList<Type>::Add(Type const &obj, int index) {
     Node<Type>* node = new Node<Type>(obj);
 
     if(size_ == 0 || index >= size_) {
@@ -96,7 +95,7 @@ void LinkedList<Type>::Add(int index, Type const &obj) {
 }
 
 template<typename Type>
-Type LinkedList<Type>::Remove(int index) const {
+Type LinkedList<Type>::Remove(int index) {
     if(index < 0 || index >= Size()) {
         throw "index out of range";
     }
@@ -178,8 +177,5 @@ Type LinkedList<Type>::Get(int index) const {
     }
     return tmp->Retrieve();
 }
-/*
-        Type Get(int i) const; // returns element at index of null if out of range
 
-*/
 #endif // ANDREW_LINKEDLIST_LIST_H
