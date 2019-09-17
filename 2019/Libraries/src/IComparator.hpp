@@ -4,7 +4,10 @@
 template <typename Type>
 class IComparator {
     public:
-        virtual int compare(Type const &, Type const &) = 0;
+        // return -1 if first arg should be sorted in front of second
+        // return 1 if second arg should be sorted in front of first
+        // return 0 if equal
+        virtual int Compare(Type const &, Type const &) = 0;
 
 };
 #endif // ANDREW_COMPARATOR_ICOMPARATOR_H

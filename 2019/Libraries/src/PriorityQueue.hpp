@@ -9,13 +9,14 @@ class PriorityQueue {
         Type* queue_;
         int size_;
         int capacity_;
-        IComparator<Type> comparator_;
+        IComparator<Type>* comparator_;
 
         void IncreaseCapacity();
         void Swap(int, int);
+        int PercolateDownIndex(int);
 
     public:
-        PriorityQueue(int, IComparator<Type> const &);
+        PriorityQueue(int, IComparator<Type> const *);
         ~PriorityQueue();
 
         int Size() const;
@@ -46,7 +47,23 @@ void PriorityQueue<Type>::Swap(int indexA, int indexB) {
 }
 
 template<typename Type>
-PriorityQueue<Type>::PriorityQueue(int capacity, IComparator<Type> const &comparator):
+int PriorityQueue<Type>::PercolateDownIndex(int parent) {
+    
+    int percolate_index = parent;
+    int child = (parent*2)+1;
+
+    if(child < size_ && comparator_->Compare(queue_[child], queue_[percolate_index]) == -1) {
+        percolate_index = child; 
+    }
+    child = (parent*2)+2;
+    if(child < size_ && comparator_->Compare(queue_[child], queue_[percolate_index]) == -1) {
+        percolate_index = child;    
+    }
+    return percolate_index;
+}
+
+template<typename Type>
+PriorityQueue<Type>::PriorityQueue(int capacity, IComparator<Type> const *comparator):
 size_(0),capacity_(capacity),comparator_(comparator) 
 {
     queue_ = new Type[capacity];
@@ -71,22 +88,62 @@ void PriorityQueue<Type>::Offer(Type const &obj) {
         IncreaseCapacity();
     }
     
-    queue_[size_++] = obj;
+    int child_index = size_;
+    int parent_index = (size_-1)/2;
+    queue_[size_] = obj;
+
+    // if child was 0, parent would be -1/2 = 0 stopping invalid array access
+    // percolate the child up the heap until it is in the correcto position
+    while(parent_index != child_index && 
+        comparator_->Compare(queue_[child_index], queue_[parent_index]) == -1 ) {
+        Swap(parent_index, child_index);
+        child_index = parent_index;
+        parent_index = (child_index-1)/2;
+    }
+    size_ += 1;; 
 }
 
 template<typename Type>
 Type PriorityQueue<Type>::Poll() {
-    // poll logic here
+    if(size_ == 0) {
+        throw "Invalid access, queue is empty";
+    }
+
+    int parent_index = 0;
+    
+    Type ret = queue_[parent_index];
+    size_ -= 1;
+
+    if(size_ > 0) {
+        queue_[parent_index] = queue_[size_];
+       
+        int percolate_index = PercolateDownIndex(parent_index);
+        while(percolate_index < size_ && percolate_index != parent_index) {
+            Swap(parent_index, percolate_index);
+            parent_index = percolate_index;
+            percolate_index = PercolateDownIndex(parent_index);
+        }
+    }
+    return ret;
 }
 
 template <typename Type>
 Type PriorityQueue<Type>::Peek() const {
-    // peek logic here
+    if(size_ == 0) {
+        throw "Invalid access, queue is empty";
+    }
+
+    return queue_[0];
 }
 
 template <typename Type>
 bool PriorityQueue<Type>::Contains(Type const &obj) const {
-    // contains logic here
+    for(int i = 0; i < size_; i++) {
+        if(queue_[i] == obj) {
+            return true;
+        }
+    }
+    return false;
 }
 
 #endif // ANDREW_QUEUE_PRIORITYQUEUE_H
