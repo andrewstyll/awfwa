@@ -6,10 +6,10 @@ TESTDIR = test
 SRCDIR = src
 INSTALLDIR = build
 
-OUTPUT_LIST_TEST_FILE = test_linkedlist
+OUTPUT_LIST_TEST_FILE = test_linkedlist.out
 LIST_OBJECTS = TestLinkedList.o
 
-OUTPUT_PQ_TEST_FILE = test_priorityqueue
+OUTPUT_PQ_TEST_FILE = test_priorityqueue.out
 PQ_OBJECTS = TestPriorityQueue.o
 
 testlist: $(OUTPUT_LIST_TEST_FILE)
