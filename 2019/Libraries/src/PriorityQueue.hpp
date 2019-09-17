@@ -73,6 +73,7 @@ template<typename Type>
 PriorityQueue<Type>::~PriorityQueue() {
     size_ = 0;
     capacity_ = 0;
+    // not really good form to delete here as pQ didn't create comparator. should come back to this
     delete comparator_;
     delete[] queue_;
 }

@@ -7,5 +7,8 @@
 using namespace std;
 
 int main() {
+    IComparator<int>* min_comp = new MinComparator<int>();
+    delete min_comp;
+
     return 0;
 }
