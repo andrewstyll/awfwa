@@ -1,35 +1,35 @@
 CXX = g++
 CXXFLAGS = -Wall -g
-VPATH = $(SRCDIR):$(TESTDIR):$(INSTALLDIR)
+VPATH = $(SRC_DIR):$(TEST_DIR):$(INSTALL_DIR)
 
-TESTDIR = test
-SRCDIR = src
-INSTALLDIR = build
+TEST_DIR = test
+SRC_DIR = src
+INSTALL_DIR = build
 
 OUTPUT_LIST_TEST_FILE = test_linkedlist.out
 LIST_OBJECTS = TestLinkedList.o
 
 OUTPUT_PQ_TEST_FILE = test_priorityqueue.out
-PQ_OBJECTS = TestPriorityQueue.o
+PQ_OBJECTS = TestPriorityQueue.o MinComparator.o MaxComparator.o
 
 testlist: $(OUTPUT_LIST_TEST_FILE)
 testpq: $(OUTPUT_PQ_TEST_FILE)
 
 .PHONY: clean
 clean:
-	rm -f $(SRCDIR)/*.gch
-	rm -f $(INSTALLDIR)/*
+	rm -f $(SRC_DIR)/*.gch
+	rm -f $(INSTALL_DIR)/*
 
 # link
-$(INSTALLDIR)/$(OUTPUT_LIST_TEST_FILE): $(LIST_OBJECTS)
+$(INSTALL_DIR)/$(OUTPUT_LIST_TEST_FILE): $(LIST_OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(INSTALLDIR)/$(OUTPUT_PQ_TEST_FILE): $(PQ_OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+$(INSTALL_DIR)/$(OUTPUT_PQ_TEST_FILE): $(PQ_OBJECTS)
+	$(CXX) $(PQ_OBJECTS) -o $@
 
 # compile
-$(INSTALLDIR)/$(LIST_OBJECTS): TestLinkedList.cpp
+$(INSTALL_DIR)/$(LIST_OBJECTS): TestLinkedList.cpp
 	$(CXX) $(CXXFLAGS) -c $^ -o $@
 
-$(INSTALLDIR)/$(PQ_OBJECTS): TestPriorityQueue.cpp
-	$(CXX) $(CXXFLAGS) -c $^ -o $@
+$(INSTALL_DIR)/%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
