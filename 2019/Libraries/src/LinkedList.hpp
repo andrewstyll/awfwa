@@ -1,5 +1,5 @@
-#ifndef ANDREW_LINKEDLIST_LIST_H
-#define ANDREW_LINKEDLIST_LIST_H
+#ifndef ANDREW_LIST_LINKEDLIST_H
+#define ANDREW_LIST_LINKEDLIST_H
 
 #include <cstddef>
 #include "Node.hpp"
@@ -178,4 +178,4 @@ Type LinkedList<Type>::Get(int index) const {
     return tmp->Retrieve();
 }
 
-#endif // ANDREW_LINKEDLIST_LIST_H
+#endif // ANDREW_LIST_LINKEDLIST_H

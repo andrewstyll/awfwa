@@ -1,5 +1,5 @@
-#ifndef ANDREW_LINKEDLIST_NODE_H
-#define ANDREW_LINKEDLIST_NODE_H
+#ifndef ANDREW_LIST_NODE_H
+#define ANDREW_LIST_NODE_H
 
 #include <cstddef>
 
@@ -52,4 +52,4 @@ void Node<Type>::SetPrev(Node<Type> *prev) {
     prev_ = prev;
 }
 
-#endif  //  ANDREW_LINKEDLIST_NODE_H
+#endif  //  ANDREW_LIST_NODE_H
