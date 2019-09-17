@@ -10,7 +10,6 @@ class MinComparator : public IComparator<Type> {
         // return 1 if second arg should be sorted in front of first
         // return 0 if equal
         int Compare(Type const &, Type const &);
-
 };
 
 template <typename Type>

@@ -7,8 +7,16 @@
 using namespace std;
 
 int main() {
-    IComparator<int>* min_comp = new MinComparator<int>();
-    delete min_comp;
+    PriorityQueue<int>* pQ = new PriorityQueue<int>(10, new MaxComparator<int>());
+     
+    for(int i = 14; i > 0; i--) {
+        pQ->Offer(i);
+    }
+    while(pQ->Size() > 0) {
+        cout << pQ->Poll() << " ";
+    }
+    cout << "\n";
+    delete pQ;
 
     return 0;
 }

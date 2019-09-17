@@ -9,14 +9,14 @@ class PriorityQueue {
         Type* queue_;
         int size_;
         int capacity_;
-        IComparator<Type>* comparator_;
+        IComparator<Type>* const comparator_;
 
         void IncreaseCapacity();
         void Swap(int, int);
         int PercolateDownIndex(int);
 
     public:
-        PriorityQueue(int, IComparator<Type> const *);
+        PriorityQueue(int, IComparator<Type>* const);
         ~PriorityQueue();
 
         int Size() const;
@@ -63,7 +63,7 @@ int PriorityQueue<Type>::PercolateDownIndex(int parent) {
 }
 
 template<typename Type>
-PriorityQueue<Type>::PriorityQueue(int capacity, IComparator<Type> const *comparator):
+PriorityQueue<Type>::PriorityQueue(int capacity, IComparator<Type>* const comparator):
 size_(0),capacity_(capacity),comparator_(comparator) 
 {
     queue_ = new Type[capacity];
@@ -101,7 +101,7 @@ void PriorityQueue<Type>::Offer(Type const &obj) {
         child_index = parent_index;
         parent_index = (child_index-1)/2;
     }
-    size_ += 1;; 
+    size_ += 1; 
 }
 
 template<typename Type>
@@ -117,7 +117,7 @@ Type PriorityQueue<Type>::Poll() {
 
     if(size_ > 0) {
         queue_[parent_index] = queue_[size_];
-       
+        
         int percolate_index = PercolateDownIndex(parent_index);
         while(percolate_index < size_ && percolate_index != parent_index) {
             Swap(parent_index, percolate_index);

@@ -10,7 +10,7 @@ OUTPUT_LIST_TEST_FILE = test_linkedlist.out
 LIST_OBJECTS = TestLinkedList.o
 
 OUTPUT_PQ_TEST_FILE = test_priorityqueue.out
-PQ_OBJECTS = TestPriorityQueue.o MinComparator.o MaxComparator.o
+PQ_OBJECTS = TestPriorityQueue.o
 
 testlist: $(OUTPUT_LIST_TEST_FILE)
 testpq: $(OUTPUT_PQ_TEST_FILE)
@@ -25,11 +25,11 @@ $(INSTALL_DIR)/$(OUTPUT_LIST_TEST_FILE): $(LIST_OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 $(INSTALL_DIR)/$(OUTPUT_PQ_TEST_FILE): $(PQ_OBJECTS)
-	$(CXX) $(PQ_OBJECTS) -o $@
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # compile
 $(INSTALL_DIR)/$(LIST_OBJECTS): TestLinkedList.cpp
 	$(CXX) $(CXXFLAGS) -c $^ -o $@
 
-$(INSTALL_DIR)/%.o: %.cpp
+$(INSTALL_DIR)/$(PQ_OBJECTS): TestPriorityQueue.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
