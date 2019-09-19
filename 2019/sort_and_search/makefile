@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -g
+CXXFLAGS = -std=c++11 -Wall -g
 
 SRC_DIR = src/
 INSTALL_DIR = build/
@@ -19,7 +19,7 @@ clean:
 
 # link
 $(DIJKSTRA_OUT): $(DIJKSTRA_OBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $<
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # compile
 $(DIJKSTRA_OBJ): $(INSTALL_DIR)%.o : $(SRC_DIR)%.cpp
