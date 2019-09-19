@@ -2,6 +2,7 @@
 #define ANDREW_QUEUE_PRIORITYQUEUE_H
 
 #include "IComparator.hpp"
+#include <type_traits>
 
 template<typename Type>
 class PriorityQueue {
@@ -140,8 +141,14 @@ Type PriorityQueue<Type>::Peek() const {
 template <typename Type>
 bool PriorityQueue<Type>::Contains(Type const &obj) const {
     for(int i = 0; i < size_; i++) {
-        if(queue_[i] == obj) {
-            return true;
+        if(std::is_pointer<Type>::value) {
+            if(*obj == *queue_[i]) {
+                return true;
+            }
+        } else {
+            if(obj == queue_[i]) {
+                return true;
+            }
         }
     }
     return false;

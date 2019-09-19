@@ -1,6 +1,7 @@
 #ifndef ANDREW_LIST_LINKEDLIST_H
 #define ANDREW_LIST_LINKEDLIST_H
 
+#include <type_traits>
 #include <cstddef>
 #include "Node.hpp"
 
@@ -153,8 +154,15 @@ int LinkedList<Type>::IndexOf(Type const &obj) const {
     Node<Type> *tmp = head_;
     int i = 0;
     while(ret == -1 && tmp != NULL) {
-        if(tmp->Retrieve() == obj) {
-            ret = i;
+        // need to dereference for potential comparator overload operator
+        if(std::is_pointer<Type>::value) {
+            if(*tmp->Retrieve() == *obj) {
+                ret = i;
+            }
+        } else {
+            if(tmp->Retrieve() == obj) {
+                ret = i;
+            }
         }
         tmp = tmp->Next();
         i++;
